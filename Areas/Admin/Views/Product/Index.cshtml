@@ -1,0 +1,100 @@
+﻿@model PagedList.IPagedList<LaptopEshop.EF.Product>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_MainLayoutAdmin.cshtml";
+}
+
+<div class="container">
+
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="page-title-box">
+                <h4 class="page-title">Quản lý sản phẩm </h4>
+                <ol class="breadcrumb p-0 m-0">
+                    <li>
+                        <a href="#">Zircos</a>
+                    </li>
+                    <li>
+                        <a href="#">Tables </a>
+                    </li>
+                    <li class="active">
+                        Editable Tables
+                    </li>
+                </ol>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+    <!-- end row -->
+
+
+
+
+
+    <div class="panel">
+
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="m-b-30">
+                        <a href="@Url.Action("Create","Product")"><button id="addToTable" class="btn btn-success waves-effect waves-light">Add <i class="mdi mdi-plus-circle-outline"></i></button></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="">
+                <table class="table table-striped add-edit-table table-bordered" id="datatable-editable">
+                    <thead>
+                        <tr>
+                            <th>Mã sản phẩm</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Loại sản phẩm</th>
+                            <th>Giảm giá</th>
+
+                            <th>Đơn giá</th>
+                            <th>Ảnh</th>
+
+                            <th>Tình trạng</th>
+                            <th>Số lượng</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+
+                            <tr class="gradeX">
+                                <td>@item.Id</td>
+                                <td>
+                                    @item.Name
+                                </td>
+                                <td>@item.Category.NameVN</td>
+                                <td>@item.Discount</td>
+                                <td>@item.UnitPrice</td>
+                                <td>@item.Image</td>
+                                <td>@item.Available</td>
+
+                                <td>@item.Quantity</td>
+                                <td class="actions">
+                                    <a href="#" class="hidden on-editing save-row"><i class="fa fa-save"></i></a>
+                                    <a href="#" class="hidden on-editing cancel-row"><i class="fa fa-times"></i></a>
+                                    <a href="@Url.Action("Edit","Product", new {id = item.Id })" class="on-default edit-row"><i class="fa fa-pencil"></i></a>
+                                    <a href="@Url.Action("Delete","Product", new {id = item.Id })" class="on-default remove-row"><i class="fa fa-trash-o"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+
+                </table>
+                @Html.PagedListPager(Model, pageNumber => Url.Action("Index", new { pageNumber }))
+            </div>
+        </div>
+        <!-- end: page -->
+
+    </div> <!-- end Panel -->
+
+
+
+</div> <!-- container -->

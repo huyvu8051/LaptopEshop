@@ -1,0 +1,79 @@
+﻿@model IEnumerable<LaptopEshopConnection.LoaiSanPham>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_MainLayoutAdmin.cshtml";
+}
+
+<div class="container">
+
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="page-title-box">
+                <h4 class="page-title">Quản lý loại sản phẩm </h4>
+                <ol class="breadcrumb p-0 m-0">
+                    <li>
+                        <a href="#">Zircos</a>
+                    </li>
+                    <li>
+                        <a href="#">Tables </a>
+                    </li>
+                    <li class="active">
+                        Editable Tables
+                    </li>
+                </ol>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+    <!-- end row -->
+
+
+    <div class="panel">
+
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="m-b-30">
+                        <a href="@Url.Action("Create","Category")"> <button id="addToTable" class="btn btn-success waves-effect waves-light">Add <i class="mdi mdi-plus-circle-outline"></i></button></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="">
+                <table class="table table-striped add-edit-table table-bordered" id="datatable-editable">
+                    <thead>
+                        <tr>
+                            <th>Mã loại sản phẩm</th>
+                            <th>Tên loại sản phẩm</th>
+                           
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr class="gradeX">
+                                <td>@item.MaLoaiSanPham</td>
+                                
+                                <td>@item.TenLoaiSanPham</td>
+                                <td class="actions">
+                                    <a href="#" class="hidden on-editing save-row"><i class="fa fa-save"></i></a>
+                                    <a href="#" class="hidden on-editing cancel-row"><i class="fa fa-times"></i></a>
+                                    <a href="@Url.Action("Edit", "Category", new { id = item.MaLoaiSanPham})" class="on-default edit-row"><i class="fa fa-pencil"></i></a>
+                                    <a href="@Url.Action("Delete", "Category", new { id = item.MaLoaiSanPham })" class="on-default remove-row"><i class="fa fa-trash-o"></i></a>
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- end: page -->
+
+    </div> <!-- end Panel -->
+
+
+
+</div> <!-- container -->

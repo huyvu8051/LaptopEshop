@@ -1,0 +1,152 @@
+﻿@model LaptopEshop.EF.Product
+
+
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_MainLayoutAdmin.cshtml";
+}
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm("Edit", "Product", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Product</h4>
+        @*<label for="Available">Available</label>
+        @Html.CheckBoxFor(model => model.Available)<br />*@
+        <hr />
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+     
+    <div class="form-group">
+
+
+
+        @Html.LabelFor(model => model.Image, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <button id="btnSelectImage">Chọn ảnh</button>
+            @Html.EditorFor(model => model.Image, new { htmlAttributes = new { @class = "form-control", @id = "txtImage" } })
+            @* @Html.TextBox("file", "", new { type = "file" })*@
+            @Html.ValidationMessageFor(model => model.Image, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+       @* <div class="form-group">
+
+
+            @Html.LabelFor(model => model.Image, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                  @Html.TextBox("file", @Model.Image, new { type = "file", value = @Model.Image })
+                    @Html.ValidationMessageFor(model => model.Image, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.UnitPrice, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.UnitPrice, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.UnitPrice, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Discount, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Discount, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Discount, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Quantity, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Quantity, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ProductDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ProductDate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ProductDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @* @Html.LabelFor(model => model.Available, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label for="Available" class="control-label col-md-2">Available</label>
+            <label></label>
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @*   @Html.CheckBoxFor(m => m.Available, new { @checked = Model.Available, @class = "form-control" })*@
+
+                    @Html.CheckBoxFor(model => model.Available)
+
+
+                    @*      @Html.ValidationMessageFor(model => model.Available, "", new { @class = "text-danger" })*@
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CategoryId, "CategoryId", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("CategoryId", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CategoryId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" }, id = "txtContent" })
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+@section jsFooter{
+    <script>
+        var editor = CKEDITOR.replace('txtContent', {
+            customConfig: '/Areas/Admin/js/ckeditor/config.js',
+            allowedContent: true,
+            height: 640
+        });
+
+        $(document).ready(function () {
+
+            $('#btnSelectImage').on('click', function (e) {
+                e.preventDefault();
+                var finder = new CKFinder();
+                finder.selectActionFunction = function (url) {
+                    $('#txtImage').val(url);
+
+                };
+                finder.popup();
+            })
+        })
+    </script>
+}
+<div>
+
+    @Html.ActionLink("Back to List", "Index")
+</div>

@@ -1,0 +1,218 @@
+﻿@model PagedList.IPagedList<LaptopEshop.EF.Product>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+
+
+
+<!-- BREADCRUMBS SETCTION START -->
+<div class="breadcrumbs-section plr-200 mb-80">
+    <div class="breadcrumbs overlay-bg">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="breadcrumbs-inner">
+                        <h1 class="breadcrumbs-title">Tất cả sản phẩm</h1>
+                        <ul class="breadcrumb-list">
+                            <li><a href="index.html">Home</a></li>
+                            <li>product grid view</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- BREADCRUMBS SETCTION END -->
+<!-- Start page content -->
+<div id="page-content" class="page-wrapper">
+
+    <!-- SHOP SECTION START -->
+    <div class="shop-section mb-80">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-9 col-md-push-3 col-sm-12">
+                    <div class="shop-content">
+                        <!-- shop-option start -->
+                        <div class="shop-option box-shadow mb-30 clearfix">
+                            <!-- Nav tabs -->
+                            <ul class="shop-tab f-left" role="tablist">
+                                <li class="active">
+                                    <a href="#grid-view" data-toggle="tab"><i class="zmdi zmdi-view-module"></i></a>
+                                </li>
+
+                            </ul>
+                            <!-- short-by -->
+                            <div class="short-by f-left text-center">
+                                <span>Sort by :</span>
+                                <select>
+                                    <option value="volvo">Newest items</option>
+                                    <option value="saab">Saab</option>
+                                    <option value="mercedes">Mercedes</option>
+                                    <option value="audi">Audi</option>
+                                </select>
+                            </div>
+                            <!-- showing -->
+                            <div class="showing f-right text-right">
+                                <span>Showing : 01-09 of 17.</span>
+                            </div>
+                        </div>
+                        <!-- shop-option end -->
+                        <!-- Tab Content start -->
+                        <div class="tab-content">
+                            <!-- grid-view -->
+                            <div role="tabpanel" class="tab-pane active" id="grid-view">
+                                <div class="row">
+                                    @foreach (var item in Model)
+                                    {
+                                        <!-- product-item start -->
+                                        <div class="col-md-4 col-sm-4 col-xs-12">
+                                            <div class="product-item">
+                                                <div class="product-img">
+                                                    <a href="@Url.Action("Details","Product",new { id = item.Id })">
+                                                        <img src="@item.Image" alt="" />
+                                                        @* /Asset/img/product/*@
+                                                    </a>
+                                                </div>
+                                                <div class="product-info">
+                                                    <h6 class="product-title">
+
+                                                        <a href="@Url.Action("Details","Product",new { id = item.Id })">@item.Name</a>
+
+                                                    </h6>
+                                                    <div class="pro-rating">
+                                                        <a href="#"><i class="zmdi zmdi-star"></i></a>
+                                                        <a href="#"><i class="zmdi zmdi-star"></i></a>
+                                                        <a href="#"><i class="zmdi zmdi-star"></i></a>
+                                                        <a href="#"><i class="zmdi zmdi-star-half"></i></a>
+                                                        <a href="#"><i class="zmdi zmdi-star-outline"></i></a>
+                                                    </div>
+                                                    <h3 class="pro-price">@item.UnitPrice VND</h3>
+                                                    <ul class="action-button">
+                                                        <li>
+                                                            <a href="#" title="Wishlist"><i class="zmdi zmdi-favorite"></i></a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#" data-toggle="modal" data-target="#productModal" title="Quickview"><i class="zmdi zmdi-zoom-in"></i></a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#" title="Compare"><i class="zmdi zmdi-refresh"></i></a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="@Url.Action("Create","Cart",new { id = item.Id })" title="Add to cart"><i class="zmdi zmdi-shopping-cart-plus"></i></a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- product-item end -->
+
+                                    }
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- Tab Content end -->
+                        @Html.PagedListPager(Model, pageNumber => Url.Action("Index", new { pageNumber }))
+                        <!-- shop-pagination start -->
+                        <ul class="shop-pagination box-shadow text-center ptblr-10-30">
+                            <li><a href="#"><i class="zmdi zmdi-chevron-left"></i></a></li>
+                            <li><a href="#">01</a></li>
+
+                            <li class="active"><a href="#"><i class="zmdi zmdi-chevron-right"></i></a></li>
+                        </ul>
+                        <!-- shop-pagination end -->
+                    </div>
+                </div>
+                <div class="col-md-3 col-md-pull-9 col-sm-12">
+                    <!-- widget-search -->
+                    <aside class="widget-search mb-30">
+                        <form action="#">
+                            <input type="text" placeholder="Search here...">
+                            <button type="submit"><i class="zmdi zmdi-search"></i></button>
+                        </form>
+                    </aside>
+                    <!-- widget-categories -->
+                    <aside class="widget widget-categories box-shadow mb-30">
+                        <h6 class="widget-title border-left mb-20">Categories</h6>
+                        <div id="cat-treeview" class="product-cat">
+                            <ul>
+                                <li class="closed">
+                                    <a href="#">Brand One</a>
+                                    <ul>
+                                        <li><a href="#">Mobile</a></li>
+                                        <li><a href="#">Tab</a></li>
+                                        <li><a href="#">Watch</a></li>
+                                        <li><a href="#">Head Phone</a></li>
+                                        <li><a href="#">Memory</a></li>
+                                    </ul>
+                                </li>
+                                <li class="open">
+                                    <a href="#">Brand Two</a>
+                                    <ul>
+                                        <li><a href="#">Mobile</a></li>
+                                        <li><a href="#">Tab</a></li>
+                                        <li><a href="#">Watch</a></li>
+                                        <li><a href="#">Head Phone</a></li>
+                                        <li><a href="#">Memory</a></li>
+                                    </ul>
+                                </li>
+                                <li class="closed">
+                                    <a href="#">Accessories</a>
+                                    <ul>
+                                        <li><a href="#">Footwear</a></li>
+                                        <li><a href="#">Sunglasses</a></li>
+                                        <li><a href="#">Watches</a></li>
+                                        <li><a href="#">Utilities</a></li>
+                                    </ul>
+                                </li>
+                                <li class="closed">
+                                    <a href="#">Top Brands</a>
+                                    <ul>
+                                        <li><a href="#">Mobile</a></li>
+                                        <li><a href="#">Tab</a></li>
+                                        <li><a href="#">Watch</a></li>
+                                        <li><a href="#">Head Phone</a></li>
+                                        <li><a href="#">Memory</a></li>
+                                    </ul>
+                                </li>
+                                <li class="closed">
+                                    <a href="#">Jewelry</a>
+                                    <ul>
+                                        <li><a href="#">Footwear</a></li>
+                                        <li><a href="#">Sunglasses</a></li>
+                                        <li><a href="#">Watches</a></li>
+                                        <li><a href="#">Utilities</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </aside>
+
+
+                    <!-- operating-system -->
+                    <aside class="widget operating-system box-shadow mb-30">
+                        <h6 class="widget-title border-left mb-20">operating system</h6>
+                        <form action="action_page.php">
+                            <label><input type="checkbox" name="operating-1" value="phone-1">Windows Phone</label><br>
+                            <label><input type="checkbox" name="operating-1" value="phone-1">Bleckgerry ios</label><br>
+                            <label><input type="checkbox" name="operating-1" value="phone-1">Android</label><br>
+                            <label><input type="checkbox" name="operating-1" value="phone-1">ios</label><br>
+                            <label><input type="checkbox" name="operating-1" value="phone-1">Windows Phone</label><br>
+                            <label><input type="checkbox" name="operating-1" value="phone-1">Symban</label><br>
+                            <label class="mb-0"><input type="checkbox" name="operating-1" value="phone-1">Bleckgerry os</label><br>
+                        </form>
+                    </aside>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- SHOP SECTION END -->
+
+</div>
+<!-- End page content -->
