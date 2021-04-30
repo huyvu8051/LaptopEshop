@@ -12,11 +12,14 @@ namespace LaptopEshop.Services
         private static LaptopEshopDbContext db = new LaptopEshopDbContext();
         public static IEnumerable<Cart> findByUserId(String id)
         {
-             return db.Carts.SqlQuery("Select * from Carts where UserId ='" + id + "'");
+            return db.Carts.Where(s => s.UserId == id);
+            // return db.Carts.SqlQuery("Select * from Carts where UserId ='" + id + "'");
             //return db.Carts.Find(id);
         }
-        public static void add(string userId, int productId)
+        public static Cart add(string userId, int productId)
         {
+            
+           
             //Cart cart = db.Carts.SqlQuery("Select * from Carts where userId = '" + userId + "' and productId ='" +productId+"'").FirstOrDefault();
             Cart cart = db.Carts.Find(userId, productId);
             if (cart != null)
@@ -29,12 +32,14 @@ namespace LaptopEshop.Services
             else
             {
                 cart = new Cart();
+                
                 cart.UserId = userId;
                 cart.ProductId = productId;
                 cart.Quantity += 1;
                 db.Carts.Add(cart);
             }
             db.SaveChanges();
+            return cart;
 
 
 
@@ -43,6 +48,14 @@ namespace LaptopEshop.Services
         {
             Cart cart = db.Carts.Find(userId, productId);
             db.Carts.Remove(cart);
+            db.SaveChanges();
+
+        }
+        public static void delete(string userId)
+        {
+            IEnumerable<Cart> cart = db.Carts.Where(s =>  s.UserId == userId);
+            foreach(var item in cart)
+            db.Carts.Remove(item);
             db.SaveChanges();
 
         }

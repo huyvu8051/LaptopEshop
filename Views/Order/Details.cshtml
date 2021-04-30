@@ -1,0 +1,104 @@
+﻿@model IEnumerable<LaptopEshop.EF.OrderDetail>
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<!-- Start page content -->
+<section id="page-content" class="page-wrapper">
+
+    <!-- SHOP SECTION START -->
+    <div class="shop-section mb-80">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-md-12 col-sm-12">
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                      
+                        <!-- order-complete start -->
+                        <div class="tab-pane active" id="order-complete">
+                            <div class="order-complete-content box-shadow">
+                                <div class="thank-you p-30 text-center">
+                                    <h6 class="text-black-5 mb-0">Đơn hàng đang được vận chuyển.</h6>
+                                </div>
+
+                                <div class="row">
+                                    <!-- our order -->
+                                    <div class="col-md-6">
+                                        <!-- our order -->
+                                        <div class="payment-details pl-10 mb-50">
+                                            <h6 class="widget-title border-left mb-20">our order</h6>
+                                            <table>
+                                                @foreach (var item in Model)
+                                                {
+
+                                                    <tr>
+                                                        <td class="td-title-1">@item.Product.Name x @item.Quantity</td>
+                                                        <td class="td-title-2 product-sub">@(item.Product.UnitPrice * item.Quantity)</td>
+                                                    </tr>
+
+
+
+
+                                                }
+
+
+                                                <tr>
+                                                    <td class="order-total">Order Total</td>
+                                                    <td class="order-total-price" id="total-price">$2425.00</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+
+                                        
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="bill-details p-30">
+                                            <h6 class="widget-title border-left mb-20">billing details</h6>
+                                            <ul class="bill-address">
+                                                <li>
+                                                    <span>Địa chỉ:</span>
+                                                    @ViewBag.order.Address
+                                                </li>
+                                                <li>
+                                                    <span>Ghi chú:</span>
+                                                    @ViewBag.order.Description
+                                                </li>
+                                                <li>
+                                                    <span>Email : </span>
+                                                    @User.Identity.Name
+                                                </li>
+                                            </ul>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- order-complete end -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- SHOP SECTION END -->
+
+</section>
+<!-- End page content -->
+
+<script>
+
+    $(document).ready(function () {
+        updateTotal();
+    });
+    function updateTotal() {
+        var totalElement = document.getElementById('total-price');
+        var total = 0;
+        var subtotalList = document.getElementsByClassName('product-sub');
+        for (var i = 0; i < subtotalList.length; i++) {
+            total += parseFloat(subtotalList[i].innerHTML);
+        }
+        totalElement.innerHTML = total;
+    }
+</script>

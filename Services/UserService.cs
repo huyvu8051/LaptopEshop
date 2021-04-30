@@ -15,5 +15,10 @@ namespace LaptopEshop.Services
         {
             return db.AspNetUsers.ToList().OrderByDescending(x => x.Id).ToPagedList(pageNumber, pageSize);
         }
+        public static AspNetUser findByUsername(string userName){
+        
+                return db.AspNetUsers.Where(s => s.UserName == userName).FirstOrDefault();
+        }
+      
     }
 }

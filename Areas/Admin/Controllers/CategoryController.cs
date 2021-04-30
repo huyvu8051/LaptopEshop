@@ -8,23 +8,24 @@ using System.Web.Mvc;
 
 namespace LaptopEshop.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class CategoryController : Controller
     {
-        [Authorize(Roles = "Admin")]
+        
         // GET: Admin/Category
         public ActionResult Index()
         {
             var db = CategoryService.FindAll();
             return View(db);
         }
-        [Authorize(Roles = "Admin")]
+      
         public ActionResult Create()
         {
             
             return View();
         }
 
-        [Authorize(Roles = "Admin")]
+       
         [HttpPost]
         public ActionResult Create(Category category)
         {
@@ -43,14 +44,14 @@ namespace LaptopEshop.Areas.Admin.Controllers
         }
 
 
-        [Authorize(Roles = "Admin")]
+       
         public ActionResult Edit(int id)
         {
             var db = CategoryService.FindOneById(id);
             return View(db);
         }
 
-        [Authorize(Roles = "Admin")]
+      
         [HttpPost]
         public ActionResult Edit(Category category)
         {
@@ -66,14 +67,14 @@ namespace LaptopEshop.Areas.Admin.Controllers
             }
         }
 
-        [Authorize(Roles = "Admin")]
+    
         public ActionResult Delete(int id)
         {
             CategoryService.Delete(id);
             return RedirectToAction("Index");
         }
 
-        [Authorize(Roles = "Admin")]
+      
         [HttpPost]
         public ActionResult Delete(int id, FormCollection collection)
         {

@@ -7,9 +7,10 @@ using System.Web.Mvc;
 
 namespace LaptopEshop.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class UserController : Controller
     {
-        [Authorize(Roles = "Admin")]
+        
         // GET: Admin/User
         public ActionResult Index(int pageNumber = 1, int pageSize = 10)
         {
@@ -17,7 +18,7 @@ namespace LaptopEshop.Areas.Admin.Controllers
             return View(db);
         }
 
-        [Authorize(Roles = "Admin")]
+        
         // GET: Admin/User/Details/5
         public ActionResult Details(int id)
         {
@@ -25,7 +26,6 @@ namespace LaptopEshop.Areas.Admin.Controllers
         }
 
 
-        [Authorize(Roles = "Admin")]
         // GET: Admin/User/Create
         public ActionResult Create()
         {

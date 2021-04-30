@@ -9,9 +9,10 @@ using System.IO;
 
 namespace LaptopEshop.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ProductController : Controller
     {
-        [Authorize(Roles = "Admin")]
+        
         // GET: Admin/SanPham
         public ActionResult Index(int pageNumber = 1, int pageSize = 10)
         {
@@ -20,7 +21,7 @@ namespace LaptopEshop.Areas.Admin.Controllers
         }
 
 
-        [Authorize(Roles = "Admin")]
+       
         // GET: Admin/SanPham/Details/5
         public ActionResult Details(int id)
         {
@@ -28,7 +29,7 @@ namespace LaptopEshop.Areas.Admin.Controllers
         }
 
 
-        [Authorize(Roles = "Admin")]
+       
         // GET: Admin/SanPham/Create
         public ActionResult Create()
         {
@@ -38,7 +39,7 @@ namespace LaptopEshop.Areas.Admin.Controllers
 
 
         [ValidateInput(false)]
-        [Authorize(Roles = "Admin")]
+       
         // POST: Admin/SanPham/Create
         [HttpPost]
         public ActionResult Create(Product product)
@@ -78,7 +79,7 @@ namespace LaptopEshop.Areas.Admin.Controllers
 
 
         // GET: Admin/SanPham/Edit/5
-        [Authorize(Roles = "Admin")]
+       
         public ActionResult Edit(int id)
         {
             
@@ -87,7 +88,7 @@ namespace LaptopEshop.Areas.Admin.Controllers
             return View(db);
         }
 
-        [Authorize(Roles = "Admin")]
+    
         [ValidateInput(false)]
         // POST: Admin/SanPham/Edit/5
         [HttpPost]
@@ -116,7 +117,7 @@ namespace LaptopEshop.Areas.Admin.Controllers
         }
 
 
-        [Authorize(Roles = "Admin")]
+
         // GET: Admin/SanPham/Delete/5
         public ActionResult Delete(int id)
         {
@@ -126,7 +127,7 @@ namespace LaptopEshop.Areas.Admin.Controllers
         }
 
 
-        [Authorize(Roles = "Admin")]
+
         // POST: Admin/SanPham/Delete/5
         [HttpPost]
         public ActionResult Delete(int id, FormCollection collection)

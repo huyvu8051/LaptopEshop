@@ -5,11 +5,9 @@
     Layout = "~/Areas/Admin/Views/Shared/_MainLayoutAdmin.cshtml";
 }
 
-<h2>Index</h2>
+<h2>Quản lý đơn hàng</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+
 <table class="table">
     <tr>
         <th>Order Id</th>
@@ -53,9 +51,10 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-              
-                <a href="@Url.Action("Index","OrderDetail", new{id = item.Id })">Detail</a>|
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+
+                <a href="@Url.Action("Details","Order", new{id = item.Id })">Detail</a> |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id }) | 
+                @Html.ActionLink("Hoàn thành", "Done", new { id = item.Id })
             </td>
         </tr>
     }

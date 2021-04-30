@@ -31,6 +31,7 @@ namespace LaptopEshop.Services
         public static void Create(Product product)
         {
             product.Category = db.Categories.Find(product.CategoryId);
+            product.ProductDate = DateTime.Now;
             db.Products.Add(product);
             
             db.SaveChanges();

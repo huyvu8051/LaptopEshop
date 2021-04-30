@@ -5,40 +5,137 @@
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 
-<h2>Index</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
+<!-- Start page content -->
+<section id="page-content" class="page-wrapper">
 
-        <th>
-            @Html.DisplayNameFor(model => model.Product.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Quantity)
-        </th>
-        <th></th>
-    </tr>
+    <!-- SHOP SECTION START -->
+    <div class="shop-section mb-80">
+        <div class="container">
+            <div class="row">
 
-    @foreach (var item in Model)
-    {
-        <tr>
+                <div class="col-md-12">
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <!-- shopping-cart start -->
+                        <div class="tab-pane active" id="shopping-cart">
+                            <div class="shopping-cart-content">
+                                <form action="#">
+                                    <div class="table-content table-responsive mb-50">
+                                        <table class="text-center">
+                                            <thead>
+                                                <tr>
+                                                    <th class="product-thumbnail">Sản phẩm</th>
+                                                    <th class="product-price">Giá</th>
+                                                    <th class="product-quantity">Số lượng</th>
+                                                    <th class="product-subtotal">Tổng</th>
+                                                    <th class="product-remove">Xoá</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model)
+                                                {
+                                                    <!-- tr -->
+                                                    <tr data-id="@item.ProductId" data-price="@item.Product.UnitPrice">
+                                                        <td class="product-thumbnail">
+                                                            <div class="pro-thumbnail-img">
+                                                                <img src="@item.Product.Image" alt="">
+                                                            </div>
+                                                            <div class="pro-thumbnail-info text-left">
+                                                                <h6 class="product-title-2">
+                                                                    <a href="#">@item.Product.Name</a>
+                                                                </h6>
+                                                                <p>Hãng: @item.Product.Category.NameVN</p>
+                                                              
+                                                            </div>
+                                                        </td>
+                                                        <td class="product-price">@item.Product.UnitPrice</td>
+                                                        <td class="product-quantity" >
+                                                            
+                                                                <input type="number" min="1" value="@item.Quantity" name="qtybutton"  class="cart-plus-minus-box">
+                                                            
+                                                        </td>
+                                                        <td class="product-subtotal product-sub ">@(item.Quantity*item.Product.UnitPrice)</td>
+                                                        <td class="product-remove">
+                                                            <a href="@Url.Action("Delete", "Cart", new {id = item.ProductId })"><i class="zmdi zmdi-close"></i></a>
+                                                        </td>
+                                                    </tr>
+                                                    <!-- tr -->
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="row">
 
-            <td>
-                @Html.DisplayFor(modelItem => item.Product.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Quantity)
-            </td>
-            <td>
-                @*@Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |*@
-                @* @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |*@
-                @Html.ActionLink("Delete", "Delete", new { id = item.ProductId })
-            </td>
-        </tr>
+                                        <div class="col-md-6">
+                                            <div class="payment-details box-shadow p-30 mb-50">
+                                                <h6 class="widget-title border-left mb-20">Tổng tiền:</h6>
+                                                <table>
+
+                                                    <tr>
+                                                        <td class="order-total">Tổng:</td>
+                                                        <td id="total-price" class="order-total-price">$170.00</td>
+                                                    </tr>
+                                                </table>
+                                                    @if (Model.Any())
+                                                    {
+                                                    <a href="@Url.Action("Create", "Order")" class="submit-btn-1 black-bg btn-hover-2 btn">Đặt hàng</a>
+                                                }
+
+                                                </div>
+                                        </div>
+                                        <div class="col-md-6"></div>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                        <!-- shopping-cart end -->
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- SHOP SECTION END -->
+
+</section>
+<!-- End page content -->
+<script>
+
+    $(document).ready(function () {
+        updateTotal();
+        $(".cart-plus-minus-box").on("input", function () {
+            var id = $(this).parents("[data-id]").attr("data-id");
+            var qty = $(this).val();
+            $.ajax({
+                url: `/api/CartAPI/put?id=${id}&qty=${qty}`,
+                type: 'Put',
+                dataType: 'json',
+                success: function (resp) {
+                    var info = JSON.parse(resp);
+                    $("#cart-cnt").html(info.count);
+                    $("#cart-ant").html(info.amount);
+
+                }
+            });
+            var price = $(this).parents("[data-id]").attr("data-price");
+            
+            var amt = Math.round(price * qty);
+            $(this).parents("tr").find("td:eq(3)").html(`${amt}`);
+            updateTotal();
+
+        });
+    });
+
+    function updateTotal() {
+        var totalElement = document.getElementById('total-price');
+        var total = 0;
+        var subtotalList = document.getElementsByClassName('product-sub');
+        for (var i = 0; i < subtotalList.length; i++) {
+            total += parseFloat(subtotalList[i].innerHTML);
+        }
+        totalElement.innerHTML = total;
     }
-
-</table>
-<a href="@Url.Action("Create", "Order")">Order</a>
+   
+</script>

@@ -1,4 +1,4 @@
-﻿@model PagedList.IPagedList< LaptopEshop.EF.Product>
+﻿@model PagedList.IPagedList<LaptopEshop.EF.Product>
 @using PagedList.Mvc;
 
 @{
@@ -40,26 +40,48 @@
                         <!-- shop-option start -->
                         <div class="shop-option box-shadow mb-30 clearfix">
                             <!-- Nav tabs -->
-                            <ul class="shop-tab f-left" role="tablist">
-                                <li class="active">
-                                    <a href="#grid-view" data-toggle="tab"><i class="zmdi zmdi-view-module"></i></a>
-                                </li>
-                              
-                            </ul>
-                            <!-- short-by -->
-                            <div class="short-by f-left text-center">
-                                <span>Sort by :</span>
-                                <select>
-                                    <option value="volvo">Newest items</option>
-                                    <option value="saab">Saab</option>
-                                    <option value="mercedes">Mercedes</option>
-                                    <option value="audi">Audi</option>
-                                </select>
-                            </div>
-                            <!-- showing -->
-                            <div class="showing f-right text-right">
-                                <span>Showing : 01-09 of 17.</span>
-                            </div>
+
+                            <form action="/" method="get">
+                                <div class="short-by f-left text-left">
+                                    <span>Hãng :</span>
+                                    <select name="category">
+                                        <option value="0">Không lọc</option>
+                                        @foreach (var item in ViewBag.categories)
+                                        {
+                                            if (ViewBag.category == item.Id)
+                                            {
+                                                <option value="@item.Id" selected>@item.NameVN</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.Id">@item.NameVN</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                                <!-- short-by -->
+                                <div class="short-by f-left text-center">
+                                    <span>Sắp xếp theo :</span>
+                                    <select name="reverse">
+                                        @if (ViewBag.reverse == 1)
+                                        {
+                                            <option value="0">Thời gian</option>
+                                            <option value="1" selected>giá</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="0" selected>Thời gian</option>
+                                            <option value="1">giá</option>
+                                        }
+
+                                    </select>
+                                </div>
+                                <div class="short-by f-left text-center">
+                                    <button type="submit" class="btn btn-success">Lọc</button>
+                                </div>
+
+                                <!-- showing -->
+                            </form>
                         </div>
                         <!-- shop-option end -->
                         <!-- Tab Content start -->
@@ -75,14 +97,14 @@
                                                 <div class="product-img">
                                                     <a href="@Url.Action("Details","Product",new { id = item.Id })">
                                                         <img src="@item.Image" alt="" />
-                                                       @* /Asset/img/product/*@
+                                                        @* /Asset/img/product/*@
                                                     </a>
                                                 </div>
                                                 <div class="product-info">
                                                     <h6 class="product-title">
-                                                      
-                                                            <a href="@Url.Action("Details","Product",new { id = item.Id })">@item.Name</a>
-                                                        
+
+                                                        <a href="@Url.Action("Details","Product",new { id = item.Id })">@item.Name</a>
+
                                                     </h6>
                                                     <div class="pro-rating">
                                                         <a href="#"><i class="zmdi zmdi-star"></i></a>
@@ -93,18 +115,13 @@
                                                     </div>
                                                     <h3 class="pro-price">@item.UnitPrice VND</h3>
                                                     <ul class="action-button">
-                                                        <li>
-                                                            <a href="#" title="Wishlist"><i class="zmdi zmdi-favorite"></i></a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="#" data-toggle="modal" data-target="#productModal" title="Quickview"><i class="zmdi zmdi-zoom-in"></i></a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="#" title="Compare"><i class="zmdi zmdi-refresh"></i></a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="@Url.Action("Create","Cart",new { id = item.Id })" title="Add to cart"><i class="zmdi zmdi-shopping-cart-plus"></i></a>
-                                                        </li>
+
+                                                        @if (Request.IsAuthenticated)
+                                                        {
+                                                            <li>
+                                                                <a title="Add to cart"><i onclick="addcart('@item.Id')" class="zmdi zmdi-shopping-cart-plus"></i></a>
+                                                            </li>
+                                                        }
                                                     </ul>
                                                 </div>
                                             </div>
@@ -112,102 +129,29 @@
                                         <!-- product-item end -->
 
                                     }
-                                    </div>
+                                </div>
                             </div>
-                      
+
                         </div>
                         <!-- Tab Content end -->
-                        @Html.PagedListPager(Model, pageNumber => Url.Action("Index", new { pageNumber }))
                         <!-- shop-pagination start -->
                         <ul class="shop-pagination box-shadow text-center ptblr-10-30">
-                            <li><a href="#"><i class="zmdi zmdi-chevron-left"></i></a></li>
-                            <li><a href="#">01</a></li>
-                            
-                            <li class="active"><a href="#"><i class="zmdi zmdi-chevron-right"></i></a></li>
+                            @Html.PagedListPager(Model, pageNumber => Url.Action("Index", new { pageNumber, category = ViewBag.category, reverse = ViewBag.reverse, search = ViewBag.search }))
                         </ul>
                         <!-- shop-pagination end -->
                     </div>
                 </div>
                 <div class="col-md-3 col-md-pull-9 col-sm-12">
                     <!-- widget-search -->
+
                     <aside class="widget-search mb-30">
-                        <form action="#">
-                            <input type="text" placeholder="Search here...">
+                        <form action="/">
+                            <input type="text" name="search" placeholder="Search here...">
                             <button type="submit"><i class="zmdi zmdi-search"></i></button>
                         </form>
                     </aside>
-                    <!-- widget-categories -->
-                    <aside class="widget widget-categories box-shadow mb-30">
-                        <h6 class="widget-title border-left mb-20">Categories</h6>
-                        <div id="cat-treeview" class="product-cat">
-                            <ul>
-                                <li class="closed">
-                                    <a href="#">Brand One</a>
-                                    <ul>
-                                        <li><a href="#">Mobile</a></li>
-                                        <li><a href="#">Tab</a></li>
-                                        <li><a href="#">Watch</a></li>
-                                        <li><a href="#">Head Phone</a></li>
-                                        <li><a href="#">Memory</a></li>
-                                    </ul>
-                                </li>
-                                <li class="open">
-                                    <a href="#">Brand Two</a>
-                                    <ul>
-                                        <li><a href="#">Mobile</a></li>
-                                        <li><a href="#">Tab</a></li>
-                                        <li><a href="#">Watch</a></li>
-                                        <li><a href="#">Head Phone</a></li>
-                                        <li><a href="#">Memory</a></li>
-                                    </ul>
-                                </li>
-                                <li class="closed">
-                                    <a href="#">Accessories</a>
-                                    <ul>
-                                        <li><a href="#">Footwear</a></li>
-                                        <li><a href="#">Sunglasses</a></li>
-                                        <li><a href="#">Watches</a></li>
-                                        <li><a href="#">Utilities</a></li>
-                                    </ul>
-                                </li>
-                                <li class="closed">
-                                    <a href="#">Top Brands</a>
-                                    <ul>
-                                        <li><a href="#">Mobile</a></li>
-                                        <li><a href="#">Tab</a></li>
-                                        <li><a href="#">Watch</a></li>
-                                        <li><a href="#">Head Phone</a></li>
-                                        <li><a href="#">Memory</a></li>
-                                    </ul>
-                                </li>
-                                <li class="closed">
-                                    <a href="#">Jewelry</a>
-                                    <ul>
-                                        <li><a href="#">Footwear</a></li>
-                                        <li><a href="#">Sunglasses</a></li>
-                                        <li><a href="#">Watches</a></li>
-                                        <li><a href="#">Utilities</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                    </aside>
-                  
-                   
-                    <!-- operating-system -->
-                    <aside class="widget operating-system box-shadow mb-30">
-                        <h6 class="widget-title border-left mb-20">operating system</h6>
-                        <form action="action_page.php">
-                            <label><input type="checkbox" name="operating-1" value="phone-1">Windows Phone</label><br>
-                            <label><input type="checkbox" name="operating-1" value="phone-1">Bleckgerry ios</label><br>
-                            <label><input type="checkbox" name="operating-1" value="phone-1">Android</label><br>
-                            <label><input type="checkbox" name="operating-1" value="phone-1">ios</label><br>
-                            <label><input type="checkbox" name="operating-1" value="phone-1">Windows Phone</label><br>
-                            <label><input type="checkbox" name="operating-1" value="phone-1">Symban</label><br>
-                            <label class="mb-0"><input type="checkbox" name="operating-1" value="phone-1">Bleckgerry os</label><br>
-                        </form>
-                    </aside>
-                  
+
+
                 </div>
             </div>
         </div>
@@ -215,4 +159,31 @@
     <!-- SHOP SECTION END -->
 
 </div>
+<script>
+
+
+    function addcart(productId) {
+
+        var data = {};
+
+        data["productId"] = productId;
+
+        $.ajax({
+            url: '/api/CartAPI/Get',
+            type: 'Get',
+            contentType: 'application/json',
+            data: data,
+            dataType: 'text',
+            success: function (result) {
+                // console.log(result);
+                alert("Đã thêm vào giỏ hàng sản phẩm: " + result);
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+
+</script>
 <!-- End page content -->

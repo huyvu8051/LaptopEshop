@@ -1,9 +1,13 @@
 ﻿
 using LaptopEshop.EF;
 using LaptopEshop.Services;
+using PagedList;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.SqlServer;
 using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.SessionState;
@@ -13,20 +17,43 @@ namespace LaptopEshop.Controllers
     [SessionState(SessionStateBehavior.Required)]
     public class ProductController : Controller
     {
-        // GET: Shop
-        public ActionResult Index(int pageNumber = 1, int pageSize = 10)
+        private LaptopEshopDbContext db;
+        public ProductController()
         {
-          
+            db = new LaptopEshopDbContext();
+        }
+        // GET: Shop
+        public ActionResult Index(int pageNumber = 1, int pageSize = 5, string search = "", int category = 0, int reverse = 0)
+        {
+            IEnumerable<Product> data = db.Products.ToList().OrderByDescending(s=>s.ProductDate);
+            if (!search.Equals(""))
+            {
+                search = ConvertToUnSign(search);
+                data = db.Products.Where(x => SqlFunctions.PatIndex("%"+search+"%", x.Name) > 0).ToList();
+                ViewBag.search = search;
+            }
+            if(category != 0)
+            {
+                data = data.Where(s => s.CategoryId == category);
+                ViewBag.category = category;
+            }
+            if(reverse != 0)
+            {
+                data = data.OrderByDescending(s => s.UnitPrice).Reverse();
+                ViewBag.reverse = reverse;
+            }
+            data = data.ToPagedList(pageNumber,pageSize);
+
+            ViewBag.categories = db.Categories.ToList();
            
-            var db = ProductService.FindAll(pageNumber, pageSize);
-            return View(db); 
+            return View(data); 
         }
 
         public ActionResult Category(int id, int pageNumber = 1, int pageSize = 10)
         {
-            var db = ProductService.FindAllByCategoryId(id,pageNumber,pageSize);
+            var data = ProductService.FindAllByCategoryId(id,pageNumber,pageSize);
             //return View(db);
-            return View("~/Views/Product/Index.cshtml", db);
+            return View("~/Views/Product/Index.cshtml", data);
         }
         // GET: Shop/Cart
         public ActionResult Cart()
@@ -35,11 +62,30 @@ namespace LaptopEshop.Controllers
             return View();
         }
 
+      
         // GET: Shop/Details/5
         public ActionResult Details(int id)
         {
-            var db = ProductService.FindOneById(id);
-            return View(db);
+            Product data = ProductService.FindOneById(id);
+            if (Session["history"] == null)
+            {
+                Session["history"] = new List<Product>();
+            }
+            List<Product> histories = (List<Product>)Session["history"];
+            if(histories.Where(s=>s.Id == data.Id).Count() == 0)
+            {
+                histories.Add(data);
+               
+            }
+            else
+            {
+                histories.Remove(histories.Where(s => s.Id == data.Id).FirstOrDefault());
+                histories.Add(data);
+            }
+            Session["history"] = histories;
+            IEnumerable<Product> list = histories;
+            ViewBag.histories = list.Reverse();
+            return View(data);
         }
 
         // GET: Shop/Create
@@ -126,6 +172,22 @@ namespace LaptopEshop.Controllers
             {
                 return View();
             }
+        }
+        private string ConvertToUnSign(string input)
+        {
+            input = input.Trim();
+            for (int i = 0x20; i < 0x30; i++)
+            {
+                input = input.Replace(((char)i).ToString(), " ");
+            }
+            Regex regex = new Regex(@"\p{IsCombiningDiacriticalMarks}+");
+            string str = input.Normalize(NormalizationForm.FormD);
+            string str2 = regex.Replace(str, string.Empty).Replace('đ', 'd').Replace('Đ', 'D');
+            while (str2.IndexOf("?") >= 0)
+            {
+                str2 = str2.Remove(str2.IndexOf("?"), 1);
+            }
+            return str2;
         }
     }
 }

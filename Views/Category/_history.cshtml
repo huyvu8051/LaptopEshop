@@ -1,0 +1,63 @@
+﻿@model IEnumerable<LaptopEshop.EF.Product>
+@{
+    ViewBag.Title = "_history";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<!-- single-product-area end -->
+<div class="related-product-area">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="section-title text-left mb-40">
+                <h2 class="uppercase">Lịch sử</h2>
+                <h6>Những sản phẩm bạn đã xem</h6>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="active-related-product">
+            @foreach (var item in Model)
+            {
+                <!-- product-item start -->
+                <div class="col-xs-12">
+                    <div class="product-item">
+                        <div class="product-img">
+                            <a href="single-product.html">
+                                <img src="~/Asset/img/product/1.jpg" alt="" />
+                            </a>
+                        </div>
+                        <div class="product-info">
+                            <h6 class="product-title">
+                                <a href="single-product.html">Product Name</a>
+                            </h6>
+                            <div class="pro-rating">
+                                <a href="#"><i class="zmdi zmdi-star"></i></a>
+                                <a href="#"><i class="zmdi zmdi-star"></i></a>
+                                <a href="#"><i class="zmdi zmdi-star"></i></a>
+                                <a href="#"><i class="zmdi zmdi-star-half"></i></a>
+                                <a href="#"><i class="zmdi zmdi-star-outline"></i></a>
+                            </div>
+                            <h3 class="pro-price">$ 869.00</h3>
+                            <ul class="action-button">
+                                <li>
+                                    <a href="#" title="Wishlist"><i class="zmdi zmdi-favorite"></i></a>
+                                </li>
+                                <li>
+                                    <a href="#" data-toggle="modal" data-target="#productModal" title="Quickview"><i class="zmdi zmdi-zoom-in"></i></a>
+                                </li>
+                                <li>
+                                    <a href="#" title="Compare"><i class="zmdi zmdi-refresh"></i></a>
+                                </li>
+                                <li>
+                                    <a href="#" title="Add to cart"><i class="zmdi zmdi-shopping-cart-plus"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- product-item end -->
+            }
+        </div>
+    </div>
+</div>
+
